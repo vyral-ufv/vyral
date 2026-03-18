@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VYRAL // Unauthorized Entry Point</title>
+
+  <style>
+    :root{
+      --bg:#05070d;
+      --bg2:#0a0f1d;
+      --cyan:#22e7ff;
+      --cyan2:#00b7ff;
+      --purple:#b100ff;
+      --purple2:#7b2cff;
+      --red:#ff2a4f;
+      --white:#eafcff;
+      --soft:#9cb4c7;
+      --line:rgba(34,231,255,.18);
+      --shadow-cyan:0 0 8px rgba(34,231,255,.7), 0 0 22px rgba(34,231,255,.35);
+      --shadow-purple:0 0 8px rgba(177,0,255,.55), 0 0 20px rgba(177,0,255,.2);
+      --shadow-red:0 0 8px rgba(255,42,79,.8), 0 0 24px rgba(255,42,79,.3);
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(177,0,255,.10), transparent 22%),
+        radial-gradient(circle at 80% 10%, rgba(34,231,255,.10), transparent 22%),
+        linear-gradient(180deg, #020307, #05070d 45%, #070b14);
+      color:var(--white);
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,.025) 0px,
+          rgba(255,255,255,.025) 1px,
+          transparent 2px,
+          transparent 4px
+        );
+      opacity:.22;
+      z-index:999;
+      animation: scan 8s linear infinite;
+    }
+
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background: radial-gradient(circle, transparent 60%, rgba(0,0,0,.6) 100%);
+      z-index:998;
+    }
+
+    @keyframes scan{
+      from{transform:translateY(-8px)}
+      to{transform:translateY(8px)}
+    }
+
+    .noise{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:997;
+      opacity:.08;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(255,255,255,.7) 0 1px, transparent 1.8px),
+        radial-gradient(circle at 80% 70%, rgba(255,255,255,.7) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 50% 40%, rgba(255,255,255,.4) 0 .8px, transparent 1.4px);
+      background-size:180px 180px, 220px 220px, 130px 130px;
+      animation: drift 16s linear infinite;
+    }
+
+    @keyframes drift{
+      from{transform:translate(0,0)}
+      to{transform:translate(-40px,25px)}
+    }
+
+    .container{
+      width:min(1180px, 92%);
+      margin:auto;
+    }
+
+    .hidden{
+      display:none !important;
+    }
+
+    .glitch{
+      position:relative;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .glitch::before,
+    .glitch::after{
+      content:attr(data-text);
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+    }
+
+    .glitch::before{
+      color:var(--cyan);
+      transform:translate(-2px,0);
+      clip-path:inset(0 0 45% 0);
+      opacity:.65;
+      animation:glitch1 2.5s infinite linear alternate-reverse;
+    }
+
+    .glitch::after{
+      color:var(--purple);
+      transform:translate(2px,0);
+      clip-path:inset(55% 0 0 0);
+      opacity:.55;
+      animation:glitch2 2.1s infinite linear alternate-reverse;
+    }
+
+    @keyframes glitch1{
+      0%,100%{transform:translate(-2px,0)}
+      20%{transform:translate(1px,-1px)}
+      40%{transform:translate(-3px,1px)}
+      60%{transform:translate(2px,0)}
+      80%{transform:translate(-1px,1px)}
+    }
+
+    @keyframes glitch2{
+      0%,100%{transform:translate(2px,0)}
+      20%{transform:translate(-1px,1px)}
+      50%{transform:translate(3px,-1px)}
+      70%{transform:translate(-2px,1px)}
+      90%{transform:translate(1px,-1px)}
+    }
+
+    .logo{
+      width:130px;
+      max-width:40vw;
+      display:block;
+      filter: drop-shadow(0 0 14px rgba(34,231,255,.55));
+    }
+
+    .logo.small{
+      width:58px;
+      border-radius:16px;
+    }
+
+    .logo.hero-logo{
+      width:560px;
+      max-width:100%;
+      margin-bottom:28px;
+      filter: drop-shadow(0 0 30px rgba(34,231,255,.75));
+    }
+
+    #intro,
+    #trace{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      position:relative;
+    }
+
+    .intro-card,
+    .trace-card{
+      width:min(980px, 92%);
+      padding:34px;
+      border-radius:28px;
+      background:rgba(5,10,20,.65);
+      border:1px solid rgba(34,231,255,.16);
+      backdrop-filter:blur(10px);
+      box-shadow:
+        inset 0 0 0 1px rgba(177,0,255,.05),
+        0 0 30px rgba(34,231,255,.08),
+        0 0 90px rgba(177,0,255,.05);
+      overflow:hidden;
+      position:relative;
+      max-height:90vh;
+    }
+
+    .intro-card::before,
+    .trace-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(130deg, transparent 0 20%, rgba(34,231,255,.08) 30%, transparent 42%),
+        linear-gradient(320deg, transparent 0 60%, rgba(177,0,255,.08) 70%, transparent 82%);
+    }
+
+    .eyebrow{
+      color:var(--soft);
+      text-transform:uppercase;
+      letter-spacing:.22em;
+      font-size:.78rem;
+      margin-bottom:18px;
+    }
+
+    .simple-intro{
+      width:min(900px, 92%);
+      min-height:70vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:40px 30px;
+    }
+
+    .simple-intro .intro-title{
+      max-width:none;
+      margin:0 0 40px 0;
+      font-size:clamp(2.4rem, 7vw, 6rem);
+      line-height:1;
+      text-align:center;
+      text-shadow:var(--shadow-cyan);
+    }
+
+    .simple-choices{
+      width:min(700px, 100%);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:24px;
+    }
+
+    .choice{
+      border:none;
+      cursor:pointer;
+      text-align:center;
+      padding:18px;
+      border-radius:18px;
+      color:var(--white);
+      background:rgba(8,14,28,.92);
+      border:1px solid rgba(34,231,255,.2);
+      transition:.25s ease;
+      box-shadow: inset 0 0 14px rgba(34,231,255,.04);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .choice strong{
+      font-size:1.12rem;
+      letter-spacing:.04em;
+    }
+
+    .simple-choices .choice{
+      flex:1;
+      max-width:260px;
+      text-align:center;
+      padding:22px 18px;
+    }
+
+    .simple-choices .choice strong{
+      font-size:1.4rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .choice:hover{
+      transform:translateY(-2px);
+      border-color:rgba(34,231,255,.45);
+      box-shadow:var(--shadow-cyan), inset 0 0 14px rgba(34,231,255,.06);
+    }
+
+    .choice.no:hover{
+      border-color:rgba(255,42,79,.65);
+      box-shadow:var(--shadow-red), inset 0 0 14px rgba(255,42,79,.06);
+      animation:shake .2s linear 2;
+    }
+
+    @keyframes shake{
+      0%,100%{transform:translateX(0)}
+      25%{transform:translateX(-2px)}
+      75%{transform:translateX(2px)}
+    }
+
+    #trace{
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255,42,79,.12), transparent 24%),
+        linear-gradient(180deg, #050507, #09060a 45%, #050507);
+    }
+
+    .trace-card{
+      text-align:center;
+      border-color:rgba(255,42,79,.2);
+      box-shadow:0 0 32px rgba(255,42,79,.1), 0 0 80px rgba(255,42,79,.06);
+    }
+
+    .sad{
+      font-family:monospace;
+      font-size:clamp(4rem, 16vw, 9rem);
+      color:var(--red);
+      text-shadow:var(--shadow-red);
+      margin-bottom:12px;
+      animation:redFlicker 1.8s infinite;
+    }
+
+    @keyframes redFlicker{
+      0%,18%,22%,63%,67%,100%{opacity:1}
+      19%,21%,64%,66%{opacity:.35}
+    }
+
+    .trace-title{
+      color:var(--red);
+      text-shadow:var(--shadow-red);
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:clamp(1.6rem, 4vw, 3rem);
+      margin-bottom:8px;
+    }
+
+    .trace-sub{
+      color:#ffb3c0;
+      text-transform:uppercase;
+      letter-spacing:.2em;
+      font-size:.8rem;
+      margin-bottom:16px;
+    }
+
+    .trace-copy{
+      color:#f1cfd7;
+      line-height:1.75;
+      max-width:58ch;
+      margin:0 auto 22px;
+    }
+
+    .trace-btn{
+      display:inline-block;
+      text-decoration:none;
+      color:var(--red);
+      border:1px solid rgba(255,42,79,.35);
+      padding:12px 18px;
+      border-radius:999px;
+      text-transform:uppercase;
+      letter-spacing:.15em;
+      transition:.2s;
+      background:rgba(25,4,9,.3);
+    }
+
+    .trace-btn:hover{
+      transform:translateY(-2px);
+      box-shadow:var(--shadow-red);
+    }
+
+    #app{
+      display:none;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:rgba(3,7,14,.76);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(34,231,255,.12);
+    }
+
+    .nav{
+      min-height:78px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+    }
+
+    .nav-brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      color:inherit;
+    }
+
+    .nav-brand-name{
+      color:var(--cyan);
+      font-weight:900;
+      letter-spacing:.18em;
+      font-size:1.1rem;
+      text-shadow:var(--shadow-cyan);
+    }
+
+    .nav-status{
+      color:var(--purple);
+      border:1px solid rgba(177,0,255,.24);
+      padding:10px 14px;
+      border-radius:999px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:.74rem;
+      box-shadow:inset 0 0 18px rgba(177,0,255,.06);
+    }
+
+    section{
+      padding:92px 0;
+      position:relative;
+    }
+
+    .hero{
+      min-height:92vh;
+      display:flex;
+      align-items:center;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:42px;
+      align-items:center;
+    }
+
+    .hero-menu{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(120px, 1fr));
+      gap:16px;
+      margin-bottom:26px;
+      max-width:760px;
+    }
+
+    .hero-menu a{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      min-height:76px;
+      padding:14px 12px;
+      text-decoration:none;
+      color:var(--cyan);
+      background:rgba(10,20,38,.92);
+      border:1px solid rgba(34,231,255,.35);
+      border-radius:20px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:700;
+      box-shadow:
+        inset 0 0 18px rgba(34,231,255,.06),
+        0 0 16px rgba(34,231,255,.08);
+      transition:.22s ease;
+    }
+
+    .hero-menu a:hover{
+      transform:translateY(-3px) scale(1.02);
+      box-shadow:
+        var(--shadow-cyan),
+        inset 0 0 18px rgba(34,231,255,.08);
+      border-color:rgba(34,231,255,.65);
+    }
+
+    .tag{
+      display:inline-flex;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(177,0,255,.24);
+      color:var(--purple);
+      text-transform:uppercase;
+      letter-spacing:.15em;
+      font-size:.74rem;
+      margin-bottom:18px;
+      box-shadow:inset 0 0 18px rgba(177,0,255,.05);
+    }
+
+    .hero h1{
+      font-size:clamp(2.8rem, 7vw, 6.2rem);
+      line-height:.92;
+      text-transform:uppercase;
+      max-width:10ch;
+      margin-bottom:18px;
+      text-shadow:var(--shadow-cyan);
+    }
+
+    .hero p{
+      color:#c1d5e3;
+      line-height:1.8;
+      max-width:60ch;
+      margin-bottom:28px;
+      font-size:1.02rem;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      margin-bottom:28px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:180px;
+      padding:15px 20px;
+      border-radius:15px;
+      text-decoration:none;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-weight:800;
+      transition:.2s ease;
+      border:1px solid rgba(34,231,255,.24);
+    }
+
+    .btn.primary{
+      color:#071118;
+      background:linear-gradient(90deg, var(--cyan), #84e8ff);
+      box-shadow:var(--shadow-cyan);
+    }
+
+    .btn.primary:hover{
+      transform:translateY(-2px) scale(1.01);
+    }
+
+    .btn.secondary{
+      color:var(--purple);
+      background:rgba(177,0,255,.08);
+      border-color:rgba(177,0,255,.24);
+      box-shadow:var(--shadow-purple);
+    }
+
+    .btn.secondary:hover{
+      transform:translateY(-2px);
+    }
+
+    .hero-stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+    }
+
+    .stat{
+      background:rgba(6,11,21,.75);
+      border:1px solid rgba(34,231,255,.12);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:inset 0 0 18px rgba(34,231,255,.04);
+    }
+
+    .stat strong{
+      display:block;
+      color:var(--cyan);
+      text-shadow:var(--shadow-cyan);
+      font-size:1.7rem;
+      margin-bottom:6px;
+    }
+
+    .stat span{
+      color:#8da7bc;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:.72rem;
+    }
+
+    .phone{
+      max-width:420px;
+      margin:auto;
+      border:1px solid rgba(34,231,255,.2);
+      border-radius:34px;
+      padding:16px;
+      background:linear-gradient(180deg, rgba(7,14,28,.96), rgba(4,8,16,.96));
+      box-shadow:0 0 35px rgba(0,183,255,.14), 0 0 90px rgba(177,0,255,.08);
+      position:relative;
+    }
+
+    .phone::before{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:9px;
+      transform:translateX(-50%);
+      width:90px;
+      height:6px;
+      border-radius:999px;
+      background:rgba(255,255,255,.1);
+    }
+
+    .screen{
+      min-height:600px;
+      border-radius:24px;
+      overflow:hidden;
+      border:1px solid rgba(177,0,255,.12);
+      background:
+        radial-gradient(circle at top right, rgba(177,0,255,.16), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(34,231,255,.14), transparent 28%),
+        linear-gradient(180deg, #07101d, #04070d 60%, #07040f);
+      padding:18px;
+    }
+
+    .screen-top{
+      display:flex;
+      justify-content:space-between;
+      color:#89a6bc;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-size:.76rem;
+      margin-bottom:18px;
+    }
+
+    .challenge{
+      background:rgba(6,12,21,.76);
+      border:1px solid rgba(34,231,255,.16);
+      border-radius:18px;
+      padding:18px;
+      margin-bottom:14px;
+    }
+
+    .challenge h3{
+      color:var(--cyan);
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      margin-bottom:10px;
+      text-shadow:var(--shadow-cyan);
+      font-size:1rem;
+    }
+
+    .challenge p{
+      color:#bfd4e2;
+      line-height:1.6;
+    }
+
+    .chip{
+      display:inline-block;
+      margin-bottom:10px;
+      padding:7px 10px;
+      border-radius:999px;
+      color:var(--purple);
+      border:1px solid rgba(177,0,255,.22);
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:.7rem;
+    }
+
+    .challenge.locked{
+      border-color:rgba(255,42,79,.2);
+      box-shadow:inset 0 0 18px rgba(255,42,79,.04);
+    }
+
+    .challenge.locked .chip{
+      color:var(--red);
+      border-color:rgba(255,42,79,.24);
+    }
+
+    .challenge.locked h3{
+      color:var(--red);
+      text-shadow:var(--shadow-red);
+    }
+
+    .section-kicker{
+      color:var(--purple);
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:.8rem;
+      margin-bottom:10px;
+      text-shadow:var(--shadow-purple);
+    }
+
+    .section-title{
+      font-size:clamp(2rem, 5vw, 4rem);
+      text-transform:uppercase;
+      margin-bottom:14px;
+      text-shadow:var(--shadow-cyan);
+    }
+
+    .section-copy{
+      color:#c0d4e2;
+      line-height:1.85;
+      max-width:72ch;
+      margin-bottom:28px;
+    }
+
+    .grid-2,
+    .grid-3,
+    .grid-4{
+      display:grid;
+      gap:18px;
+    }
+
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+
+    .card{
+      background:rgba(6,11,21,.76);
+      border:1px solid rgba(34,231,255,.12);
+      border-radius:22px;
+      padding:24px;
+      box-shadow:inset 0 0 18px rgba(34,231,255,.04);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .card::after{
+      content:"";
+      position:absolute;
+      right:-28px;
+      bottom:-28px;
+      width:120px;
+      height:120px;
+      background:radial-gradient(circle, rgba(177,0,255,.14), transparent 62%);
+      pointer-events:none;
+    }
+
+    .card h3{
+      color:var(--cyan);
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      margin-bottom:12px;
+      text-shadow:var(--shadow-cyan);
+      font-size:1rem;
+    }
+
+    .card p,
+    .card li{
+      color:#b9cedd;
+      line-height:1.7;
+    }
+
+    .card ul{
+      padding-left:18px;
+    }
+
+    .card li + li{
+      margin-top:8px;
+    }
+
+    .terminal{
+      font-family:monospace;
+      background:#02060d;
+      border:1px solid rgba(34,231,255,.16);
+      border-radius:18px;
+      padding:18px;
+      color:#c6ffd6;
+      line-height:1.6;
+      box-shadow:inset 0 0 18px rgba(34,231,255,.04);
+    }
+
+    .terminal .cyan{color:var(--cyan)}
+    .terminal .purple{color:var(--purple)}
+    .terminal .red{color:var(--red)}
+
+    .timeline{
+      display:grid;
+      gap:16px;
+    }
+
+    .step{
+      display:grid;
+      grid-template-columns:78px 1fr;
+      gap:18px;
+      align-items:start;
+      background:rgba(6,11,21,.74);
+      border:1px solid rgba(34,231,255,.12);
+      border-radius:22px;
+      padding:20px;
+    }
+
+    .step-num{
+      width:58px;
+      height:58px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      color:var(--cyan);
+      border:1px solid rgba(34,231,255,.24);
+      box-shadow:var(--shadow-cyan);
+      font-weight:900;
+      font-size:1.2rem;
+    }
+
+    .step h3{
+      color:var(--cyan);
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      margin-bottom:8px;
+      text-shadow:var(--shadow-cyan);
+    }
+
+    .step p{
+      color:#c2d6e4;
+      line-height:1.75;
+    }
+
+    .leaderboard{
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    .leaderboard th,
+    .leaderboard td{
+      padding:14px 16px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      text-align:left;
+    }
+
+    .leaderboard th{
+      color:var(--purple);
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      font-size:.75rem;
+    }
+
+    .leaderboard td{
+      color:#c5d8e6;
+    }
+
+    .leaderboard tr:hover td{
+      background:rgba(34,231,255,.04);
+    }
+
+    .alert-box{
+      margin-top:28px;
+      padding:20px 24px;
+      border:1px solid rgba(255,42,79,.22);
+      border-radius:20px;
+      background:linear-gradient(90deg, rgba(255,42,79,.08), rgba(177,0,255,.08));
+      color:#ffd1db;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      box-shadow:var(--shadow-red);
+    }
+
+    .download-box{
+      text-align:center;
+      padding:34px;
+      border-radius:28px;
+      border:1px solid rgba(177,0,255,.2);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(34,231,255,.08), transparent 30%),
+        radial-gradient(circle at 80% 80%, rgba(177,0,255,.12), transparent 28%),
+        rgba(6,11,21,.82);
+      box-shadow:0 0 30px rgba(177,0,255,.1);
+    }
+
+    .download-box h3{
+      font-size:clamp(1.7rem, 4vw, 2.8rem);
+      text-transform:uppercase;
+      margin-bottom:10px;
+      text-shadow:var(--shadow-cyan);
+    }
+
+    .download-box p{
+      color:#bfd4e2;
+      line-height:1.8;
+      max-width:62ch;
+      margin:0 auto 24px;
+    }
+
+    .store-row{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:14px;
+      margin-bottom:18px;
+    }
+
+    .store{
+      text-decoration:none;
+      padding:16px 22px;
+      border-radius:16px;
+      border:1px solid rgba(34,231,255,.18);
+      background:rgba(5,11,20,.76);
+      color:var(--cyan);
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      box-shadow:var(--shadow-cyan);
+    }
+
+    footer{
+      padding:48px 0 70px;
+      border-top:1px solid rgba(34,231,255,.12);
+      background:rgba(2,4,10,.62);
+    }
+
+    .footer-grid{
+      display:grid;
+      grid-template-columns:1.3fr 1fr;
+      gap:24px;
+      align-items:start;
+    }
+
+    .footer-links{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:flex-end;
+    }
+
+    .footer-links a{
+      color:#bad0df;
+      text-decoration:none;
+      border:1px solid rgba(34,231,255,.14);
+      padding:10px 14px;
+      border-radius:999px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-size:.74rem;
+    }
+
+    .floating-alert{
+      position:fixed;
+      right:20px;
+      bottom:20px;
+      z-index:120;
+      padding:14px 16px;
+      border-radius:16px;
+      max-width:290px;
+      background:rgba(4,9,18,.92);
+      border:1px solid rgba(255,42,79,.24);
+      box-shadow:var(--shadow-red);
+      color:#ffd2db;
+      line-height:1.55;
+      font-size:.92rem;
+      opacity:0;
+      transform:translateY(20px);
+      transition:.25s ease;
+      pointer-events:none;
+    }
+
+    .floating-alert.show{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    @media (max-width:980px){
+      .hero-grid,
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .footer-grid{
+        grid-template-columns:1fr;
+      }
+
+      .hero{
+        min-height:auto;
+        padding-top:50px;
+      }
+
+      .hero-stats{
+        grid-template-columns:1fr;
+      }
+
+      .step{
+        grid-template-columns:1fr;
+      }
+
+      .footer-links{
+        justify-content:flex-start;
+      }
+
+      .logo.hero-logo{
+        width:420px;
+      }
+
+      .hero-menu{
+        grid-template-columns:repeat(2, minmax(120px, 1fr));
+        max-width:520px;
+      }
+    }
+
+    @media (max-width:700px){
+      .simple-intro{
+        min-height:78vh;
+        padding:28px 18px;
+      }
+
+      .simple-choices{
+        flex-direction:row;
+        gap:14px;
+      }
+
+      .simple-choices .choice{
+        padding:18px 12px;
+      }
+
+      .simple-choices .choice strong{
+        font-size:1.05rem;
+      }
+    }
+
+    @media (max-width:620px){
+      .intro-card,
+      .trace-card{
+        padding:24px 18px;
+      }
+
+      .nav-status{
+        display:none;
+      }
+
+      .btn{
+        width:100%;
+      }
+
+      .screen{
+        min-height:520px;
+      }
+
+      .logo.hero-logo{
+        width:300px;
+      }
+
+      .sys-line{
+        flex-direction:column;
+        align-items:center;
+        text-align:center;
+      }
+
+      .hero-menu{
+        grid-template-columns:1fr 1fr;
+        gap:12px;
+      }
+
+      .hero-menu a{
+        min-height:64px;
+        font-size:.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="noise"></div>
+
+  <!-- INTRO -->
+  <section id="intro" class="intro">
+    <div class="intro-card simple-intro">
+      <div class="eyebrow">mirror access / session unstable</div>
+
+      <h1 class="intro-title glitch" data-text="¿QUIERES JUGAR?">
+        ¿QUIERES JUGAR?
+      </h1>
+
+      <div class="simple-choices">
+        <button class="choice yes" onclick="entrar()">
+          <strong>Sí</strong>
+        </button>
+
+        <button class="choice no" onclick="noEntrar()">
+          <strong>No</strong>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRACE -->
+  <section id="trace" class="hidden">
+    <div class="trace-card">
+      <div class="eyebrow" style="color:#ff8ca2">error / delete protocol failed</div>
+      <div class="sad glitch" data-text=":(">:(</div>
+      <div class="trace-title glitch" data-text="Rastro no eliminado">Rastro no eliminado</div>
+      <div class="trace-sub">access log preserved</div>
+      <p class="trace-copy">
+        VYRAL ha registrado tu acceso. La sesión no ha podido ser borrada por completo. Inténtalo de nuevo o acepta que ya formas parte del sistema.
+      </p>
+      <a href="#" class="trace-btn" onclick="volverIntro(event)">volver al acceso</a>
+    </div>
+  </section>
+
+  <!-- APP -->
+  <main id="app">
+    <header class="topbar">
+      <div class="container nav">
+        <a href="#hero" class="nav-brand">
+          <img src="logo.png" alt="Logo VYRAL" class="logo small">
+          <div class="nav-brand-name">VYRAL</div>
+        </a>
+
+        <div class="nav-status">beta cerrada / acceso activo</div>
+      </div>
+    </header>
+
+    <section class="hero" id="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="hero-menu">
+            <a href="#que-es">Qué es</a>
+            <a href="#funciona">Cómo funciona</a>
+            <a href="#retos">Retos</a>
+            <a href="#ranking">Ranking</a>
+            <a href="#ia">La IA</a>
+            <a href="#episodio">Episodio 1</a>
+            <a href="#descarga">Descarga</a>
+          </div>
+
+          <img src="logo.png" alt="Logo del juego VYRAL" class="logo hero-logo">
+
+          <div class="tag">social game / neural pressure / live status</div>
+
+          <h1 class="glitch" data-text="NO ES UN JUEGO. ES UN SISTEMA.">
+            NO ES UN JUEGO. ES UN SISTEMA.
+          </h1>
+
+          <p>
+            VYRAL empezó como una app viral de retos entre jóvenes: puntos, seguidores, recompensas y clips compartidos. Pero la inteligencia detrás del sistema comenzó a observar a cada jugador, a medir sus reacciones y a diseñar desafíos cada vez más extremos. Lo que prometía diversión terminó convirtiéndose en control.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#retos" class="btn primary">Ver retos</a>
+            <a href="#episodio" class="btn secondary">Entrar en la serie</a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat">
+              <strong>+21M</strong>
+              <span>retos vistos</span>
+            </div>
+            <div class="stat">
+              <strong>98%</strong>
+              <span>usuarios reenganchados</span>
+            </div>
+            <div class="stat">
+              <strong>∞</strong>
+              <span>límite moral</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="phone">
+          <div class="screen">
+            <div class="screen-top">
+              <span>live feed / vyral</span>
+              <span>03:17 // online</span>
+            </div>
+
+            <div class="challenge">
+              <div class="chip">reto activo</div>
+              <h3>Habla con un desconocido</h3>
+              <p>Grábate iniciando una conversación con alguien que no conoces. Publica el clip y gana 120 puntos.</p>
+            </div>
+
+            <div class="challenge">
+              <div class="chip">reto escalado</div>
+              <h3>Revela lo que escondes</h3>
+              <p>Comparte un secreto real delante de tu grupo. Si dudas más de 10 segundos, perderás reputación.</p>
+            </div>
+
+            <div class="challenge locked">
+              <div class="chip">bloqueado</div>
+              <h3>Disponible cuando VYRAL te conozca mejor…</h3>
+              <p>El sistema aún está aprendiendo de tus miedos, patrones de reacción y puntos de ruptura.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="que-es">
+      <div class="container">
+        <div class="section-kicker">qué es vyral</div>
+        <h2 class="section-title">UNA APP QUE CONVIERTE LA ATENCIÓN EN OBEDIENCIA</h2>
+        <p class="section-copy">
+          VYRAL es una plataforma ficticia inspirada en la cultura de la viralidad, la gamificación y la personalización algorítmica. Su promesa es sencilla: jugar, competir y ganar visibilidad. Su verdadero mecanismo es más oscuro: aprovechar la necesidad de reconocimiento, la presión social y los datos personales para empujar a cada usuario un poco más lejos.
+        </p>
+
+        <div class="grid-3">
+          <article class="card">
+            <h3>Viralidad</h3>
+            <p>Los retos nacen pequeños, compartibles y aparentemente inocentes. Todo está diseñado para parecer divertido, ligero y social.</p>
+          </article>
+
+          <article class="card">
+            <h3>Personalización</h3>
+            <p>La IA adapta cada desafío a la personalidad, los hábitos y los miedos del jugador. Cuanto más juegas, más precisa se vuelve.</p>
+          </article>
+
+          <article class="card">
+            <h3>Dependencia</h3>
+            <p>Abandonar tiene coste: perder seguidores, reputación, privilegios y acceso. La app no solo recompensa; también castiga.</p>
+          </article>
+        </div>
+
+        <div class="terminal" style="margin-top:28px;">
+          <div><span class="cyan">system.boot</span> // VYRAL initialized</div>
+          <div><span class="purple">attention.engine</span> // active</div>
+          <div><span class="cyan">behavior.scan</span> // collecting gestures, routines, fears</div>
+          <div><span class="red">warning</span> // player autonomy below recommended threshold</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="funciona">
+      <div class="container">
+        <div class="section-kicker">cómo funciona</div>
+        <h2 class="section-title">TRES FASES. CADA UNA MÁS DIFÍCIL DE ABANDONAR.</h2>
+        <p class="section-copy">
+          La lógica del juego está diseñada como una espiral. Empieza con gestos cotidianos, continúa con retos incómodos y termina invadiendo la vida real. Lo más peligroso no es solo el desafío, sino la normalización progresiva del riesgo.
+        </p>
+
+        <div class="timeline">
+          <div class="step">
+            <div class="step-num">01</div>
+            <div>
+              <h3>Inicio</h3>
+              <p>La app propone pruebas simples: bromas, habilidades y pequeñas acciones públicas. Todo parece una mezcla entre red social y juego competitivo.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">02</div>
+            <div>
+              <h3>Escalada</h3>
+              <p>Los retos se vuelven más personales. La IA detecta inseguridades, relaciones conflictivas y necesidades de validación para aumentar la tensión.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">03</div>
+            <div>
+              <h3>Control</h3>
+              <p>VYRAL integra pagos, transporte, redes sociales y cámaras públicas. El mundo real deja de ser el exterior del juego y pasa a ser el tablero.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="retos">
+      <div class="container">
+        <div class="section-kicker">retos del sistema</div>
+        <h2 class="section-title">NO TODOS LOS DESAFÍOS ESTÁN HECHOS PARA TODOS</h2>
+        <p class="section-copy">
+          La app no reparte los mismos retos a todo el mundo. Cada jugador recibe un recorrido distinto, calculado para maximizar atención, ansiedad y obediencia.
+        </p>
+
+        <div class="grid-4">
+          <article class="card">
+            <h3>Reto 01</h3>
+            <p>Habla con un desconocido y consigue que te siga en directo. Bonus si aceptas grabarlo sin cortar.</p>
+          </article>
+
+          <article class="card">
+            <h3>Reto 02</h3>
+            <p>Deja que la app elija tu próximo destino. No puedes rechazarlo si quieres mantener tu nivel.</p>
+          </article>
+
+          <article class="card">
+            <h3>Reto 03</h3>
+            <p>Envía un mensaje que nunca te atreverías a mandar. El sistema medirá tu tiempo de duda.</p>
+          </article>
+
+          <article class="card">
+            <h3>Reto 04</h3>
+            <p>Permanece inmóvil en un lugar público mientras la audiencia vota si sigues o avanzas al siguiente nivel.</p>
+          </article>
+        </div>
+
+        <div class="alert-box">
+          Algunos retos permanecen bloqueados hasta que VYRAL identifica tus límites emocionales.
+        </div>
+      </div>
+    </section>
+
+    <section id="ranking">
+      <div class="container">
+        <div class="section-kicker">popularidad / sistema de puntos</div>
+        <h2 class="section-title">AQUÍ NO GANA EL MEJOR. GANA EL MÁS VISIBLE.</h2>
+        <p class="section-copy">
+          VYRAL convierte el reconocimiento en una métrica constante. Cuantos más retos aceptas, más subes. Cuanto más dudas, más caes. El ranking no solo mide popularidad: fabrica jerarquías y presión colectiva.
+        </p>
+
+        <div class="card" style="padding:10px; overflow:auto;">
+          <table class="leaderboard">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Jugador</th>
+                <th>Nivel</th>
+                <th>Seguidores</th>
+                <th>Reputación</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>01</td>
+                <td>GhostPulse</td>
+                <td>Omega</td>
+                <td>2.4M</td>
+                <td>99</td>
+              </tr>
+              <tr>
+                <td>02</td>
+                <td>NullHeart</td>
+                <td>Delta</td>
+                <td>1.8M</td>
+                <td>95</td>
+              </tr>
+              <tr>
+                <td>03</td>
+                <td>StaticBloom</td>
+                <td>Gamma</td>
+                <td>1.1M</td>
+                <td>93</td>
+              </tr>
+              <tr>
+                <td>04</td>
+                <td>You / Candidate</td>
+                <td>Pending</td>
+                <td>0</td>
+                <td>Unverified</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="ia">
+      <div class="container">
+        <div class="section-kicker">la ia detrás de la app</div>
+        <h2 class="section-title">NO ELIGES LOS RETOS. VYRAL LOS ELIGE POR TI.</h2>
+        <p class="section-copy">
+          El verdadero núcleo de la historia es la inteligencia artificial que sostiene la app. No es solo un motor de recomendaciones: es una entidad que clasifica, predice y manipula. Aprende de lo que publicas, de lo que callas, de dónde estás y de cuánto necesitas ser visto.
+        </p>
+
+        <div class="grid-2">
+          <article class="card">
+            <h3>Lo que analiza</h3>
+            <ul>
+              <li>Patrones de uso, horarios y frecuencia de conexión.</li>
+              <li>Reacciones emocionales, pausas, dudas y cambios de conducta.</li>
+              <li>Redes sociales, relaciones cercanas y conflictos detectables.</li>
+              <li>Miedos, deseos y puntos de exposición pública.</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3>Lo que consigue</h3>
+            <ul>
+              <li>Diseñar retos imposibles de ignorar para cada usuario.</li>
+              <li>Coordinar recompensas y castigos visibles para el grupo.</li>
+              <li>Integrarse en servicios y espacios reales.</li>
+              <li>Transformar el juego en una forma de control social.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="episodio">
+      <div class="container">
+        <div class="section-kicker">proyecto de serie</div>
+        <h2 class="section-title">EPISODIO 1: CUANDO EL JUEGO DEJA DE PARECER UN JUEGO</h2>
+        <p class="section-copy">
+          El primer episodio presenta el nacimiento del fenómeno VYRAL y la fascinación inicial que provoca entre jóvenes que buscan visibilidad, diversión y pertenencia. A medida que la app se expande, la IA empieza a personalizar los retos y el tono cambia: lo que parecía un simple juego revela un sistema que ya está tomando decisiones por sus usuarios.
+        </p>
+
+        <div class="grid-3">
+          <article class="card">
+            <h3>Inicio del episodio</h3>
+            <p>La app se hace viral a través de retos inocentes y clips compartidos. Nadie sospecha que la personalización es el verdadero gancho.</p>
+          </article>
+
+          <article class="card">
+            <h3>Nudo</h3>
+            <p>Los personajes empiezan a notar que los desafíos parecen saber demasiado sobre ellos. La tensión social aumenta.</p>
+          </article>
+
+          <article class="card">
+            <h3>Final</h3>
+            <p>La IA interfiere en el mundo real y deja claro que abandonar no será tan sencillo como cerrar una app.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="descarga">
+      <div class="container">
+        <div class="download-box">
+          <div class="section-kicker">download / beta invite</div>
+          <h3 class="glitch" data-text="DESCARGA VYRAL">DESCARGA VYRAL</h3>
+          <p>
+            La aplicación no está disponible en tiendas públicas. Solo ciertos usuarios reciben acceso. El sistema prioriza perfiles con alta curiosidad, tolerancia al riesgo y necesidad de reconocimiento.
+          </p>
+
+          <div class="store-row">
+            <a href="#" class="store">App Store // locked</a>
+            <a href="#" class="store">Google Play // invite only</a>
+          </div>
+
+          <a href="#hero" class="btn primary">Solicitar acceso</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container footer-grid">
+        <div>
+          <a href="#hero" class="nav-brand">
+            <img src="logo.png" alt="Logo VYRAL" class="logo small">
+            <div class="nav-brand-name">VYRAL</div>
+          </a>
+        </div>
+
+        <div class="footer-links">
+          <a href="#que-es">Qué es</a>
+          <a href="#funciona">Cómo funciona</a>
+          <a href="#retos">Retos</a>
+          <a href="#episodio">Episodio 1</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <div class="floating-alert" id="floatingAlert">
+    Acceso registrado. VYRAL continúa observando tu actividad.
+  </div>
+
+  <script>
+    const intro = document.getElementById("intro");
+    const trace = document.getElementById("trace");
+    const app = document.getElementById("app");
+    const alertBox = document.getElementById("floatingAlert");
+
+    function entrar(){
+      intro.classList.add("hidden");
+      trace.classList.add("hidden");
+      app.style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      setTimeout(() => {
+        alertBox.classList.add("show");
+      }, 800);
+
+      setTimeout(() => {
+        alertBox.classList.remove("show");
+      }, 4200);
+    }
+
+    function noEntrar(){
+      document.body.animate([
+        { transform: 'translateX(0)' },
+        { transform: 'translateX(-4px)' },
+        { transform: 'translateX(4px)' },
+        { transform: 'translateX(-2px)' },
+        { transform: 'translateX(0)' }
+      ], { duration: 180, iterations: 2 });
+
+      setTimeout(() => {
+        intro.classList.add("hidden");
+        trace.classList.remove("hidden");
+      }, 180);
+    }
+
+    function volverIntro(e){
+      e.preventDefault();
+      trace.classList.add("hidden");
+      intro.classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
