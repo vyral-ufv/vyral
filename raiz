@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raíz | Cocina Consciente en La Coruña</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2d4a22; /* Verde bosque profundo */
+            --secondary: #f4f1ea; /* Crema papel reciclad */
+            --accent: #8ba888; /* Verde salvia */
+            --text: #333;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; color: var(--text); background-color: var(--secondary); line-height: 1.6; }
+
+        /* --- NAVEGACIÓN --- */
+        nav { background: var(--white); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .logo { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--primary); font-weight: bold; }
+        
+        .main-menu { list-style: none; display: flex; gap: 2rem; }
+        .main-menu a { text-decoration: none; color: var(--primary); font-weight: 600; text-transform: uppercase; font-size: 0.9rem; }
+
+        .secondary-menu { list-style: none; display: flex; gap: 1rem; margin-top: 5px; }
+        .secondary-menu a { text-decoration: none; color: #777; font-size: 0.75rem; }
+
+        /* --- HERO (ABOVE THE FOLD) --- */
+        .hero { 
+            height: 90vh; 
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&q=80&w=2071') center/cover no-repeat;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: var(--white); padding: 0 20px;
+        }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: 4rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; max-width: 600px; margin-bottom: 2rem; font-weight: 300; }
+        .btn { padding: 1rem 2.5rem; background: var(--primary); color: white; text-decoration: none; border-radius: 50px; font-weight: 600; transition: transform 0.3s; }
+        .btn:hover { transform: scale(1.05); background: var(--accent); }
+
+        /* --- SECCIONES --- */
+        section { padding: 80px 10%; }
+        .section-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--primary); margin-bottom: 3rem; }
+
+        /* Propuesta de Valor */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .about-img { width: 100%; border-radius: 15px; }
+
+        /* Servicios / Categorías */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        .card { background: white; padding: 2rem; border-radius: 10px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .card h3 { color: var(--primary); margin-bottom: 1rem; }
+
+        /* Testimonios */
+        .testimonials { background: var(--primary); color: var(--white); }
+        .testimonial-item { font-style: italic; text-align: center; max-width: 800px; margin: 0 auto; font-size: 1.5rem; }
+
+        /* Contacto Form */
+        .contact-container { max-width: 600px; margin: 0 auto; background: white; padding: 3rem; border-radius: 15px; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+        input, textarea, select { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; }
+
+        footer { background: #1a1a1a; color: white; padding: 40px 10%; text-align: center; }
+        
+        @media (max-width: 768px) {
+            .about-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.5rem; }
+            nav { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MENÚ SECUNDARIO (Utilidades) -->
+    <div style="background: #fdfdfd; padding: 5px 5%; display: flex; justify-content: flex-end; border-bottom: 1px solid #eee;">
+        <ul class="secondary-menu">
+            <li><a href="#idioma">ES / GL</a></li>
+            <li><a href="#login">Área Cliente</a></li>
+            <li><a href="#trabajo">Trabaja con nosotros</a></li>
+        </ul>
+    </div>
+
+    <!-- MENÚ PRINCIPAL -->
+    <nav>
+        <div class="logo">RAÍZ.</div>
+        <ul class="main-menu">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#carta">La Carta</a></li>
+            <li><a href="#huerto">Nuestro Huerto</a></li>
+            <li><a href="#filosofia">Filosofía</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <!-- INICIO: HERO SECTION -->
+    <section id="inicio" class="hero">
+        <h1>Sabor que respeta la tierra</h1>
+        <p>Alta cocina sostenible en el corazón de La Coruña. Ingredientes de proximidad, 100% saludables y adaptados a ti.</p>
+        <a href="#reserva" class="btn">Reserva tu Mesa</a>
+    </section>
+
+    <!-- PROPUESTA DE VALOR -->
+    <section id="filosofia">
+        <div class="about-grid">
+            <div>
+                <h2 class="section-title" style="text-align: left;">Cuidamos de ti, <br>cuidamos del entorno.</h2>
+                <p>En <strong>Raíz</strong>, creemos que comer bien no debería costar el planeta. Trabajamos con productores locales de Galicia para garantizar que cada ingrediente llegue del campo a tu mesa en menos de 24 horas.</p>
+                <br>
+                <p>Nuestra cocina es inclusiva por definición: platos diseñados para celíacos, veganos y personas con alergias, sin perder ni un ápice de sabor gourmet.</p>
+                <br>
+                <a href="#historia" style="color: var(--primary); font-weight: bold;">Conoce nuestra historia &rarr;</a>
+            </div>
+            <img src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&q=80&w=1000" alt="Huerto orgánico" class="about-img">
+        </div>
+    </section>
+
+    <!-- SERVICIOS / PRODUCTOS -->
+    <section id="carta" style="background-color: #edeae2;">
+        <h2 class="section-title">Nuestra Propuesta Gastronómica</h2>
+        <div class="services-grid">
+            <div class="card">
+                <h3>Menú Degustación</h3>
+                <p>Un viaje por los sabores de la huerta gallega. 7 pases de temporada.</p>
+            </div>
+            <div class="card">
+                <h3>100% Plant-Based</h3>
+                <p>Opciones veganas creativas que sorprenden incluso a los más carnívoros.</p>
+            </div>
+            <div class="card">
+                <h3>Cocina Sin Gluten</h3>
+                <p>Certificados por la asociación de celíacos. Seguridad total en cocina.</p>
+            </div>
+            <div class="card">
+                <h3>Vinos Biodinámicos</h3>
+                <p>Bodegas locales que respetan los ciclos de la luna y la tierra.</p>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="#descargar-carta" class="btn">Ver Carta Completa (PDF)</a>
+        </div>
+    </section>
+
+    <!-- TESTIMONIOS -->
+    <section class="testimonials">
+        <div class="testimonial-item">
+            <p>"La mejor experiencia healthy en Coruña. El respeto por el producto es sublime y no tienes que preocuparte por las intolerancias."</p>
+            <br>
+            <span style="font-size: 1rem; text-transform: uppercase; letter-spacing: 2px;">— Guía Sostenible 2024</span>
+        </div>
+    </section>
+
+    <!-- PÁGINA: CONTACTO Y FORMULARIO -->
+    <section id="contacto">
+        <h2 class="section-title">Reserva o Consúltanos</h2>
+        <div class="contact-container">
+            <form action="#">
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" placeholder="Ej. María García" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="hola@ejemplo.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Tipo de consulta / Reserva</label>
+                    <select>
+                        <option>Reserva de mesa</option>
+                        <option>Evento privado</option>
+                        <option>Consulta sobre alérgenos</option>
+                        <option>Otros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Mensaje o Preferencias Dietéticas</label>
+                    <textarea rows="5" placeholder="Cuéntanos si tienes alguna alergia o preferencia especial..."></textarea>
+                </div>
+                <button type="submit" class="btn" style="border: none; width: 100%; cursor: pointer;">Enviar Solicitud</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p><strong>RAÍZ RESTAURANTE</strong></p>
+        <p>Calle Real, 123 | 15001 La Coruña</p>
+        <p>Tlf: +34 981 00 00 00</p>
+        <div style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">
+            © 2024 Raíz. Todos los derechos reservados. Política de Privacidad | Cookies
+        </div>
+    </footer>
+
+</body>
+</html>
